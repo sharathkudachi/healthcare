@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Healthcare Web App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar" id="navbar" style="display: none;">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>AI Healthcare</span>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-user">
+                    <span id="user-name"></span>
+                    <div class="user-dropdown">
+                        <button class="btn btn--secondary" onclick="showProfile()">
+                            <i class="fas fa-user"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" onclick="showProfile()">Profile</a>
+                            <a href="#" onclick="logout()">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar" style="display: none;">
+        <nav class="sidebar-nav">
+            <div id="patient-nav" class="nav-section">
+                <a href="#" onclick="showView('patient-dashboard')" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" onclick="showView('patient-policies')" class="nav-item">
+                    <i class="fas fa-shield-alt"></i> My Policies
+                </a>
+                <a href="#" onclick="showView('patient-claims')" class="nav-item">
+                    <i class="fas fa-file-medical"></i> Claims
+                </a>
+                <a href="#" onclick="showView('symptom-checker')" class="nav-item">
+                    <i class="fas fa-stethoscope"></i> Symptom Checker
+                </a>
+                <a href="#" onclick="showView('appointments')" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i> Appointments
+                </a>
+                <a href="#" onclick="showView('hospital-locator')" class="nav-item">
+                    <i class="fas fa-map-marker-alt"></i> Find Hospitals
+                </a>
+            </div>
+
+            <div id="doctor-nav" class="nav-section">
+                <a href="#" onclick="showView('doctor-dashboard')" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" onclick="showView('doctor-patients')" class="nav-item">
+                    <i class="fas fa-users"></i> Patients
+                </a>
+                <a href="#" onclick="showView('doctor-appointments')" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i> Appointments
+                </a>
+                <a href="#" onclick="showView('doctor-consultations')" class="nav-item">
+                    <i class="fas fa-video"></i> Consultations
+                </a>
+            </div>
+
+            <div id="admin-nav" class="nav-section">
+                <a href="#" onclick="showView('admin-dashboard')" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" onclick="showView('admin-users')" class="nav-item">
+                    <i class="fas fa-users"></i> Users
+                </a>
+                <a href="#" onclick="showView('admin-claims')" class="nav-item">
+                    <i class="fas fa-clipboard-list"></i> Claims
+                </a>
+                <a href="#" onclick="showView('admin-hospitals')" class="nav-item">
+                    <i class="fas fa-hospital"></i> Hospitals
+                </a>
+                <a href="#" onclick="showView('admin-analytics')" class="nav-item">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        
+        <!-- Login/Landing Page -->
+        <div id="auth-page" class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1><i class="fas fa-heartbeat"></i> AI Healthcare</h1>
+                    <p>Comprehensive Healthcare Management Platform</p>
+                </div>
+
+                <!-- Login Form -->
+                <div id="login-form" class="auth-form">
+                    <h2>Welcome Back</h2>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="login-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Login as</label>
+                            <select class="form-control" id="login-role" required>
+                                <option value="">Select Role</option>
+                                <option value="patient">Patient</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                    </form>
+                    <p class="auth-switch">New user? <a href="#" onclick="showRegister()">Register here</a></p>
+                </div>
+
+                <!-- Register Form -->
+                <div id="register-form" class="auth-form" style="display: none;">
+                    <h2>Create Account</h2>
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="register-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="register-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="register-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="register-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Register as</label>
+                            <select class="form-control" id="register-role" required>
+                                <option value="">Select Role</option>
+                                <option value="patient">Patient</option>
+                                <option value="doctor">Doctor</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full-width">Register</button>
+                    </form>
+                    <p class="auth-switch">Already have account? <a href="#" onclick="showLogin()">Login here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Dashboard -->
+        <div id="patient-dashboard" class="dashboard-view" style="display: none;">
+            <div class="dashboard-header">
+                <h1>Dashboard</h1>
+                <p>Welcome back, <span id="patient-name"></span></p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-shield-alt"></i> Policy Overview</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="policy-details" id="patient-policy-details">
+                            <!-- Policy details will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-heart"></i> Health Score</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="health-score">
+                            <div class="score-circle" id="health-score-circle">
+                                <span id="health-score-value">85</span>
+                                <span>%</span>
+                            </div>
+                            <p>Your health score is excellent!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Upcoming Appointments</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="upcoming-appointments">
+                            <!-- Appointments will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card quick-actions">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="showView('patient-claims')">
+                                <i class="fas fa-file-medical"></i>
+                                <span>File Claim</span>
+                            </button>
+                            <button class="action-btn" onclick="showView('appointments')">
+                                <i class="fas fa-calendar-plus"></i>
+                                <span>Book Appointment</span>
+                            </button>
+                            <button class="action-btn" onclick="showView('symptom-checker')">
+                                <i class="fas fa-stethoscope"></i>
+                                <span>Symptom Checker</span>
+                            </button>
+                            <button class="action-btn" onclick="showView('hospital-locator')">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Find Hospitals</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Claims -->
+        <div id="patient-claims" class="view-content" style="display: none;">
+            <div class="view-header">
+                <h1><i class="fas fa-file-medical"></i> Claims Management</h1>
+                <button class="btn btn--primary" onclick="showNewClaimModal()">
+                    <i class="fas fa-plus"></i> File New Claim
+                </button>
+            </div>
+            
+            <div class="claims-container">
+                <div class="claims-list" id="claims-list">
+                    <!-- Claims will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Symptom Checker -->
+        <div id="symptom-checker" class="view-content" style="display: none;">
+            <div class="view-header">
+                <h1><i class="fas fa-stethoscope"></i> AI Symptom Checker</h1>
+                <p>Describe your symptoms and get AI-powered health insights</p>
+            </div>
+
+            <div class="symptom-checker-container">
+                <div class="symptom-input">
+                    <h3>What symptoms are you experiencing?</h3>
+                    <div class="symptom-grid" id="symptom-grid">
+                        <!-- Symptom checkboxes will be populated here -->
+                    </div>
+                    <button class="btn btn--primary" onclick="analyzeSymptoms()">
+                        <i class="fas fa-search"></i> Analyze Symptoms
+                    </button>
+                </div>
+
+                <div class="symptom-results" id="symptom-results" style="display: none;">
+                    <h3>Analysis Results</h3>
+                    <div id="symptom-analysis">
+                        <!-- Analysis results will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hospital Locator -->
+        <div id="hospital-locator" class="view-content" style="display: none;">
+            <div class="view-header">
+                <h1><i class="fas fa-map-marker-alt"></i> Network Hospitals</h1>
+                <p>Find nearby network hospitals and specialists</p>
+            </div>
+
+            <div class="hospital-locator-container">
+                <div class="search-filters">
+                    <input type="text" class="form-control" placeholder="Search hospitals..." id="hospital-search">
+                    <select class="form-control" id="specialty-filter">
+                        <option value="">All Specialties</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Orthopedics">Orthopedics</option>
+                        <option value="Internal Medicine">Internal Medicine</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                    </select>
+                </div>
+                
+                <div class="hospitals-grid" id="hospitals-grid">
+                    <!-- Hospitals will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Doctor Dashboard -->
+        <div id="doctor-dashboard" class="dashboard-view" style="display: none;">
+            <div class="dashboard-header">
+                <h1>Doctor Dashboard</h1>
+                <p>Welcome, <span id="doctor-name"></span></p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Today's Schedule</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-number">8</div>
+                        <p>Appointments Today</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user-md"></i> Total Patients</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-number">89</div>
+                        <p>Active Patients</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-star"></i> Rating</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-number">4.8</div>
+                        <p>Average Rating</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-week"></i> This Week</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-number">35</div>
+                        <p>Total Appointments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard" class="dashboard-view" style="display: none;">
+            <div class="dashboard-header">
+                <h1>Admin Dashboard</h1>
+                <p>System Overview and Management</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Total Users</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-number">1,250</div>
+                        <p>Registered Users</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-shield-alt"></i> Active Policies</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-number">987</div>
+                        <p>Current Policies</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clock"></i> Pending Claims</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-number">45</div>
+                        <p>Awaiting Review</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-hospital"></i> Network Hospitals</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-number">156</div>
+                        <p>Partner Hospitals</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-charts">
+                <div class="chart-card">
+                    <h3>Monthly Claims Overview</h3>
+                    <canvas id="claims-chart" style="position: relative; height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Claims -->
+        <div id="admin-claims" class="view-content" style="display: none;">
+            <div class="view-header">
+                <h1><i class="fas fa-clipboard-list"></i> Claims Management</h1>
+                <p>Review and process insurance claims</p>
+            </div>
+
+            <div class="claims-management">
+                <div class="claims-filters">
+                    <select class="form-control" id="claim-status-filter">
+                        <option value="">All Claims</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="admin-claims-list" id="admin-claims-list">
+                    <!-- Admin claims will be populated here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notifications Panel -->
+    <div class="notifications-panel" id="notifications-panel">
+        <div class="notifications-header">
+            <h3><i class="fas fa-bell"></i> Notifications</h3>
+            <button class="close-btn" onclick="toggleNotifications()">&times;</button>
+        </div>
+        <div class="notifications-list" id="notifications-list">
+            <!-- Notifications will be populated here -->
+        </div>
+    </div>
+
+    <!-- AI Chat Bot -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-header" onclick="toggleChatbot()">
+            <i class="fas fa-robot"></i>
+            <span>AI Assistant</span>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages" style="display: none;">
+            <div class="message bot-message">
+                Hello! I'm your AI healthcare assistant. How can I help you today?
+            </div>
+        </div>
+        <div class="chatbot-input" id="chatbot-input" style="display: none;">
+            <input type="text" placeholder="Type your message..." id="chat-input">
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Floating Notifications Button -->
+    <button class="floating-btn notifications-btn" onclick="toggleNotifications()" id="notifications-btn">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge" id="notification-badge">2</span>
+    </button>
+
+    <!-- Modals -->
+    <div id="new-claim-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>File New Claim</h2>
+                <button class="close-btn" onclick="hideModal('new-claim-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="submitClaim(event)">
+                    <div class="form-group">
+                        <label class="form-label">Claim Type</label>
+                        <select class="form-control" required>
+                            <option value="">Select Type</option>
+                            <option value="Hospitalization">Hospitalization</option>
+                            <option value="Pharmacy">Pharmacy</option>
+                            <option value="Outpatient">Outpatient</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hospital/Provider</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Claim Amount</label>
+                        <input type="number" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Upload Documents</label>
+                        <input type="file" class="form-control" multiple>
+                    </div>
+                    <button type="submit" class="btn btn--primary">Submit Claim</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

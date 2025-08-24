@@ -1,0 +1,268 @@
+# Let me create a comprehensive data structure for the AI Healthcare Web App
+import json
+
+# Define the application structure and data for the web app
+app_data = {
+    "app_metadata": {
+        "name": "AI Healthcare Web App",
+        "description": "Comprehensive healthcare management platform with AI integration",
+        "version": "1.0.0",
+        "features": [
+            "User Management (Patients, Doctors, Admins)",
+            "Insurance Policy Management",
+            "Claims Processing",
+            "AI Symptom Checker",
+            "Hospital Locator",
+            "Appointment Booking",
+            "Health Analytics Dashboard"
+        ]
+    },
+    
+    "sample_users": [
+        {
+            "id": 1,
+            "name": "John Smith",
+            "email": "john.smith@email.com",
+            "role": "patient",
+            "age": 35,
+            "phone": "+1-555-0123",
+            "policy_id": "POL001",
+            "medical_conditions": ["Hypertension", "Diabetes Type 2"]
+        },
+        {
+            "id": 2,
+            "name": "Dr. Sarah Johnson",
+            "email": "dr.johnson@hospital.com",
+            "role": "doctor",
+            "specialization": "Cardiology",
+            "hospital": "City General Hospital",
+            "years_experience": 12,
+            "rating": 4.8
+        },
+        {
+            "id": 3,
+            "name": "Admin User",
+            "email": "admin@healthcare.com",
+            "role": "admin",
+            "permissions": ["user_management", "claims_approval", "analytics_view"]
+        }
+    ],
+    
+    "insurance_policies": [
+        {
+            "policy_id": "POL001",
+            "user_id": 1,
+            "policy_type": "Comprehensive Health",
+            "coverage_amount": 500000,
+            "premium": 12000,
+            "start_date": "2024-01-01",
+            "end_date": "2024-12-31",
+            "status": "Active",
+            "family_members": 3
+        },
+        {
+            "policy_id": "POL002",
+            "user_id": 4,
+            "policy_type": "Basic Health",
+            "coverage_amount": 200000,
+            "premium": 8000,
+            "start_date": "2024-03-01",
+            "end_date": "2025-02-28",
+            "status": "Active",
+            "family_members": 1
+        }
+    ],
+    
+    "claims": [
+        {
+            "claim_id": "CLM001",
+            "policy_id": "POL001",
+            "user_id": 1,
+            "claim_type": "Hospitalization",
+            "claim_amount": 25000,
+            "claimed_amount": 22500,
+            "status": "Approved",
+            "date_filed": "2024-06-15",
+            "date_processed": "2024-06-20",
+            "hospital": "City General Hospital",
+            "description": "Emergency cardiac procedure"
+        },
+        {
+            "claim_id": "CLM002",
+            "policy_id": "POL001",
+            "user_id": 1,
+            "claim_type": "Pharmacy",
+            "claim_amount": 1500,
+            "claimed_amount": 0,
+            "status": "Under Review",
+            "date_filed": "2024-08-01",
+            "hospital": "MedPlus Pharmacy",
+            "description": "Monthly diabetes medication"
+        }
+    ],
+    
+    "appointments": [
+        {
+            "appointment_id": "APT001",
+            "patient_id": 1,
+            "doctor_id": 2,
+            "date": "2024-09-15",
+            "time": "10:00 AM",
+            "type": "Regular Checkup",
+            "status": "Confirmed",
+            "notes": "Follow-up for diabetes management"
+        },
+        {
+            "appointment_id": "APT002",
+            "patient_id": 1,
+            "doctor_id": 2,
+            "date": "2024-09-22",
+            "time": "2:30 PM",
+            "type": "Consultation",
+            "status": "Pending",
+            "notes": "Review recent test results"
+        }
+    ],
+    
+    "hospitals": [
+        {
+            "hospital_id": "HOSP001",
+            "name": "City General Hospital",
+            "address": "123 Main Street, Downtown",
+            "phone": "+1-555-0100",
+            "specialties": ["Cardiology", "Orthopedics", "Emergency Medicine"],
+            "network_partner": True,
+            "rating": 4.5,
+            "coordinates": {"lat": 40.7128, "lng": -74.0060}
+        },
+        {
+            "hospital_id": "HOSP002",
+            "name": "Metro Health Center",
+            "address": "456 Oak Avenue, Midtown",
+            "phone": "+1-555-0200",
+            "specialties": ["Internal Medicine", "Pediatrics", "Dermatology"],
+            "network_partner": True,
+            "rating": 4.2,
+            "coordinates": {"lat": 40.7589, "lng": -73.9851}
+        }
+    ],
+    
+    "symptom_checker_data": [
+        {
+            "symptoms": ["fever", "cough", "fatigue"],
+            "possible_conditions": [
+                {
+                    "condition": "Common Cold",
+                    "probability": 75,
+                    "urgency": "Low",
+                    "recommendation": "Rest and hydration. See doctor if symptoms persist beyond 7 days."
+                },
+                {
+                    "condition": "Flu",
+                    "probability": 60,
+                    "urgency": "Medium",
+                    "recommendation": "Monitor symptoms. See doctor if fever exceeds 101°F for more than 3 days."
+                }
+            ]
+        },
+        {
+            "symptoms": ["chest pain", "shortness of breath"],
+            "possible_conditions": [
+                {
+                    "condition": "Heart Attack",
+                    "probability": 40,
+                    "urgency": "High",
+                    "recommendation": "Seek immediate emergency medical attention. Call 911."
+                },
+                {
+                    "condition": "Anxiety Attack",
+                    "probability": 35,
+                    "urgency": "Medium",
+                    "recommendation": "Practice breathing exercises. Consult healthcare provider if recurring."
+                }
+            ]
+        }
+    ],
+    
+    "dashboard_stats": {
+        "admin": {
+            "total_users": 1250,
+            "active_policies": 987,
+            "pending_claims": 45,
+            "approved_claims_this_month": 123,
+            "total_hospitals": 156,
+            "revenue_this_month": 1250000
+        },
+        "doctor": {
+            "total_patients": 89,
+            "appointments_today": 8,
+            "appointments_this_week": 35,
+            "pending_prescriptions": 12,
+            "avg_rating": 4.8
+        },
+        "patient": {
+            "active_policies": 1,
+            "claims_filed": 2,
+            "upcoming_appointments": 1,
+            "health_score": 85,
+            "last_checkup": "2024-07-15"
+        }
+    },
+    
+    "ai_health_tips": [
+        {
+            "tip": "Stay hydrated by drinking at least 8 glasses of water daily",
+            "category": "General Health",
+            "priority": "Medium"
+        },
+        {
+            "tip": "Regular exercise for 30 minutes daily can reduce diabetes risk by 50%",
+            "category": "Diabetes Prevention",
+            "priority": "High"
+        },
+        {
+            "tip": "Monitor your blood pressure regularly if you have hypertension",
+            "category": "Heart Health",
+            "priority": "High"
+        }
+    ],
+    
+    "notifications": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "title": "Appointment Reminder",
+            "message": "You have an appointment with Dr. Johnson tomorrow at 10:00 AM",
+            "type": "appointment",
+            "date": "2024-09-14",
+            "read": False
+        },
+        {
+            "id": 2,
+            "user_id": 1,
+            "title": "Claim Update",
+            "message": "Your claim CLM002 is under review",
+            "type": "claim",
+            "date": "2024-08-02",
+            "read": True
+        }
+    ]
+}
+
+# Save the data to a JSON file for use in the web app
+with open('healthcare_app_data.json', 'w') as f:
+    json.dump(app_data, f, indent=2)
+
+print("Healthcare app data structure created successfully!")
+print("\nApp Features Overview:")
+for feature in app_data["app_metadata"]["features"]:
+    print(f"- {feature}")
+
+print(f"\nSample data includes:")
+print(f"- {len(app_data['sample_users'])} users (patient, doctor, admin)")
+print(f"- {len(app_data['insurance_policies'])} insurance policies")
+print(f"- {len(app_data['claims'])} insurance claims")
+print(f"- {len(app_data['appointments'])} appointments")
+print(f"- {len(app_data['hospitals'])} network hospitals")
+print(f"- Symptom checker with AI recommendations")
+print(f"- Dashboard analytics for all user types")
