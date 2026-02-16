@@ -3,6 +3,8 @@
 A web-based Healthcare Management System designed to provide basic healthcare-related services through a simple and interactive user interface.  
 This project demonstrates frontend development concepts along with data handling using JavaScript and JSON.
 
+[View Live](https://sharathkudachi.github.io/healthcare/)
+
 ---
 
 ## 📌 Project Overview
